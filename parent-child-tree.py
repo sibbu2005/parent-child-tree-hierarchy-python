@@ -124,16 +124,16 @@ def create_hierarchy_tree(data, hierarchy={}):
             if r_val.get('parent_id') == 0:
                 r_val['children'] = {}
                 hierarchy[r_id] = r_val
-    for role_id, role_data in hierarchy.items():
-        child_roles, untouched_roles = {}, {}
-        for sub_role_id, sub_role_data in data.items():
-            if sub_role_data.get('parent_id') == role_id:
-                sub_role_data['children'] = {}
-                child_roles[sub_role_id] = sub_role_data
-            elif sub_role_data.get('parent_id') is not 0:
-                untouched_roles[sub_role_id] = sub_role_data
-        if child_roles and untouched_roles:
-            hierarchy[role_id]['children'] = create_hierarchy_tree(untouched_roles, child_roles)
-        elif not untouched_roles and child_roles:
-            hierarchy[role_id]['children'] = child_roles
+    for root_id, root_data in hierarchy.items():
+        child_nodes, untouched_nodes = {}, {}
+        for child_node_id, child_node_data in data.items():
+            if child_node_data.get('parent_id') == root_id:
+                child_node_data['children'] = {}
+                child_nodes[child_node_id] = child_node_data
+            elif child_node_data.get('parent_id') is not 0:
+                untouched_nodes[child_node_id] = child_node_data
+        if child_nodes and untouched_nodes:
+            hierarchy[root_id]['children'] = create_hierarchy_tree(untouched_nodes, child_nodes)
+        elif not untouched_nodes and child_nodes:
+            hierarchy[root_id]['children'] = child_nodes
     return hierarchy
